@@ -2,7 +2,7 @@ pipeline {
     agent { label 'ubuntu3' }
 
     environment {
-        DOCKER_COMPOSE_CMD = 'docker compose'
+        DOCKER_COMPOSE_CMD = 'docker-compose'
         REPO_URL = 'https://github.com/MUGHEESULHASSAN/Deploying_3_Tier_Web_App_Using_Docker_Compose_And_Jenkins_Pipeline.git'
         BRANCH = 'main'
 
