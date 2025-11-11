@@ -15,6 +15,7 @@ pipeline {
             }
         }
 
+        
         stage('Verify Running Containers') {
             steps {
                 sh 'sudo docker ps'
