@@ -1,6 +1,10 @@
 pipeline {
     agent { label 'ubuntu3' }
 
+    environment {
+        DOCKER_NETWORK = 'ci-network'
+    }
+
     stages {
         stage('Clone Main Repository') {
             steps {
@@ -10,8 +14,10 @@ pipeline {
 
         stage('Build & Run Main Containers') {
             steps {
-                sh 'sudo docker compose down || true'
-                sh 'sudo docker compose up -d --build'
+                sh '''
+                sudo docker compose down || true
+                sudo docker compose up -d --build
+                '''
             }
         }
 
@@ -21,26 +27,29 @@ pipeline {
             }
         }
 
-        stage('Show Logs') {
+        stage('Run Selenium Tests') {
             steps {
-                sh 'sudo docker compose logs --tail=50'
+                dir('selenium-tests') {
+                    sh '''
+                    # Wait until frontend is ready
+                    while ! nc -z user-frontend-ci 5173; do
+                        echo "Waiting for frontend..."
+                        sleep 2
+                    done
+
+                    # Build Selenium test image
+                    sudo docker build -t selenium-tests .
+
+                    # Run Selenium container inside Docker network
+                    sudo docker run --rm --network=${DOCKER_NETWORK} -e BASE_URL="http://user-frontend-ci:5173" selenium-tests
+                    '''
+                }
             }
         }
 
-        stage('Run Selenium Tests') {
+        stage('Show Logs') {
             steps {
-   
-
-                
-               
-                dir('selenium-tests') {
-                    sh 'sleep 10'
-                 
-                    sh 'sudo docker build -t selenium-tests .'
-
-                    
-                    sh 'sudo docker run selenium-tests '
-                }
+                sh 'sudo docker compose logs --tail=50'
             }
         }
     }
