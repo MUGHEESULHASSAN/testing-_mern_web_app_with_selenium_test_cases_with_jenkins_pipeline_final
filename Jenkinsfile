@@ -33,12 +33,10 @@ pipeline {
                 script {
                     sh '''
                     echo "Waiting for user-frontend-ci (5173) to be ready..."
-
                     while ! sudo docker run --rm --network=ci-network busybox nc -z user-frontend-ci 5173; do
                         echo "Frontend not ready... retrying..."
                         sleep 2
                     done
-
                     echo "Frontend is UP!"
                     '''
                 }
@@ -51,7 +49,6 @@ pipeline {
                     sh '''
                     echo "Building Selenium Test Image..."
                     sudo docker build -t selenium-tests .
-
                     echo "Running Selenium Tests..."
                     sudo docker run --rm \
                         --network=ci-network \
@@ -71,40 +68,24 @@ pipeline {
 
     post {
         success {
-            echo "✅ CI Build Completed Successfully!"
-
-            emailext(
-                to: 'qasimalik@gmail.com,zille626@gmail.com',   
-                subject: "Build Success - ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                body: """
-                The Jenkins pipeline completed successfully.
-
-                Job: ${env.JOB_NAME}
-                Build Number: ${env.BUILD_NUMBER}
-                Status: SUCCESS
-
-                Regards,
-                Jenkins CI
-                """
-            )
+            script {
+                echo "✅ CI Build Completed Successfully!"
+                emailext (
+                    subject: "Tests PASSED: ${env.JOB_NAME} [${env.BUILD_NUMBER}]",
+                    body: "All tests passed.\nBuild: ${env.BUILD_URL}",
+                    to: "ijazarslan372@gmail.com,qasimalik@gmail.com"
+                )
+            }
         }
-
         failure {
-            echo "❌ Build Failed. Check logs."
-
-            emailext(
-                to: 'qasimalik@gmail.com,zille626@gmail.com',   
-                subject: "Build Failed - ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                body: """
-                The Jenkins pipeline FAILED.
-
-                Job: ${env.JOB_NAME}
-                Build Number: ${env.BUILD_NUMBER}
-                Status: FAILED
-
-                Check the build logs for more details.
-                """
-            )
+            script {
+                echo "❌ Build Failed. Check logs."
+                emailext (
+                    subject: "Tests FAILED: ${env.JOB_NAME} [${env.BUILD_NUMBER}]",
+                    body: "Tests failed.\nBuild: ${env.BUILD_URL}",
+                    to: "ijazarslan372@gmail.com,qasimalik@gmail.com"
+                )
+            }
         }
     }
 }
