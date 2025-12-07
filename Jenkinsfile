@@ -73,7 +73,7 @@ pipeline {
                 emailext (
                     subject: "Tests PASSED: ${env.JOB_NAME} [${env.BUILD_NUMBER}]",
                     body: "All tests passed.\nBuild: ${env.BUILD_URL}",
-                    to: "ijazarslan372@gmail.com,qasimalik@gmail.com"
+                    to: "zille626@gmail.com,qasimalik@gmail.com"
                 )
             }
         }
@@ -83,7 +83,7 @@ pipeline {
                 emailext (
                     subject: "Tests FAILED: ${env.JOB_NAME} [${env.BUILD_NUMBER}]",
                     body: "Tests failed.\nBuild: ${env.BUILD_URL}",
-                    to: "ijazarslan372@gmail.com,qasimalik@gmail.com"
+                    to: "zille626@gmail.com,qasimalik@gmail.com"
                 )
             }
         }
