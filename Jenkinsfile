@@ -2,7 +2,7 @@ pipeline {
     agent { label 'ubuntu3' }
 
     environment {
-        DOCKER_NETWORK = 'ci-network'
+        DOCKER_NETWORK = 'assignment3new_ci-network'
     }
 
     stages {
