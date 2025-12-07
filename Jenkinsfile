@@ -9,7 +9,7 @@ pipeline {
 
         stage('Clone Main Repository') {
             steps {
-                git branch: 'main', url: 'https://github.com/Zillehuma626/ASSIGNMENT_3.git'
+                git branch: 'main', url: 'https://github.com/MUGHEESULHASSAN/testing-_mern_web_app_with_selenium_test_cases_with_jenkins_pipeline_final.git'
             }
         }
 
@@ -73,7 +73,7 @@ pipeline {
                 mail (
                     subject: "Tests PASSED: ${env.JOB_NAME} [${env.BUILD_NUMBER}]",
                     body: "All tests passed.\nBuild: ${env.BUILD_URL}",
-                    to: "zille626@gmail.com,qasimalik@gmail.com"
+                    to: "mugheesulhassan217@gmail.com,qasimalik@gmail.com"
                 )
             }
         }
@@ -83,7 +83,7 @@ pipeline {
                 mail (
                     subject: "Tests FAILED: ${env.JOB_NAME} [${env.BUILD_NUMBER}]",
                     body: "Tests failed.\nBuild: ${env.BUILD_URL}",
-                    to: "zille626@gmail.com,qasimalik@gmail.com"
+                    to: "mugheesulhassan217@gmail.com,qasimalik@gmail.com"
                 )
             }
         }
